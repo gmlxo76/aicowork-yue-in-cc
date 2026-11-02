@@ -1,0 +1,4 @@
+node_modules/
+aicowork-yue/
+*.log
+.DS_Store

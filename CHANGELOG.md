@@ -1,0 +1,16 @@
+# Changelog
+
+## 0.1.0 — 2026-09-19
+
+Initial release.
+
+- `compose` dispatcher subcommand wrapping AICowork YuE Studio `POST /api/v1/jobs` → poll `GET /api/v1/jobs/{id}` (3 s default) → `GET …/audio?index=0&download=true` + `GET …/artifacts/score.abc`: `--lyrics` / `--lyrics-file`, `--caption-file`, `--instrumental` (instrumental AR LoRA: forces `cot=full` + `quantization=none`, lyrics validated as structure tags — `[instrumental]` alone or intro/verse/pre-chorus/chorus/bridge/outro with optional non-overlapping `m:ss-m:ss` ranges), `--cot full|melody|off`, `--abc-file`, `--plan-only` (stage=plan, saves `.abc` only), `--from-plan JOB_ID` (top-level `source_plan_id`; rejects preset and the fixed fields locally), `--title` (defaults to the output stem), `--preset balanced|draft|memory`, `--max-tokens` / `--max-seconds` (≈25 tokens/s, ≤9000), `--min-tokens`, `--seed` (digit string ≤2^63-1, randomize off), `--cfg`, `--steps`, `--format flac|wav|mp3` (inferred from `--output`), `--fp8`, `--offload-ar`, `--vae-frames`, `--backend`, semantic and ABC sampling knobs, `--no-score`, `--no-wait`, `--timeout`, `--poll-ms`, `--idempotency-key`.
+- Every submit carries an `Idempotency-Key` (UUID unless given) and `User-Agent: YuEStudioClient/1.0`; redirects are refused. Server `warning` (token cap hit) is surfaced, plus a local NOTE when the result runs up to the cap; `PLAN: reusable` line when `exact_plan_reusable`.
+- `transcribe`: raw `application/octet-stream` upload to `POST /api/v1/covers/transcribe?filename=&title=&melody_only=` (≤90 MiB, supported extensions checked locally, never retried), poll, save `score.abc`, surface `transcription.warnings`, optional `--source-wav`.
+- Score tools: `score-inspect`, `score-strip` (`--keep both|Vocal|Ins`, writes `*-melody.abc`), `score-compare` (`--voices`, `--allow-tempo-change`).
+- Library: `jobs-list` (`--q`, `--status`, `--kind`, `--limit`), `jobs-get` (creation and transcription views, actual seed, cap vs actual length, plan-reuse status), `jobs-download` (audio + sibling score / score only), `jobs-score`, `jobs-artifact`, `jobs-bundle`, `jobs-workflow` (Studio resubmit JSON), `jobs-source-audio`, `jobs-edit`, `jobs-cancel`, `jobs-delete`.
+- `status` (live `/me`, `/status`, `/jobs` counts) and `settings` (defaults, presets, ranges, text limits, models, capabilities, limits).
+- `config-set/show/clear` — key at `%APPDATA%\aicowork-yue-in-cc\config.json` (or XDG); `YUE_API_KEY` / `YUE_BASE_URL` env overrides shared with the official Python client.
+- Exit codes: 0 ok, 1 no key, 2 auth/missing input, 3 not found/conflict (404/409/410), 4 validation (422/413), 5 rate-limit/engine (429/5xx), 6 network/408, 7 job failed/cancelled, 9 job still running, 99 unknown. `process.exitCode` everywhere.
+- Skills: `create` (mode table, caption recipe, lyrics vs structure rules, cap semantics, preset/seed guidance), `cover` (transcribe → review → strip → regenerate), `score` (inspect/strip/compare/edit hand-off), `jobs`, `config`, `status`.
+- Tests: pure-function suite (incl. structure validator and from-plan rules) + spawned-dispatcher HTTP suite against an in-memory YuE Studio fixture via `AICOWORK_YUE_TEST_FIXTURE` (no network).

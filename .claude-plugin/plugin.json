@@ -1,0 +1,13 @@
+{
+  "name": "aicowork-yue",
+  "version": "0.1.0",
+  "description": "Text → music from Claude Code via AICowork YuE Studio (YuE2-3B): vocal songs, instrumental-LoRA pieces, ABC score planning and editing, cover transcription, exact plan re-rendering; agent-decided caption / cot / preset / token cap / seed; FLAC/WAV/MP3 + ABC output.",
+  "author": {
+    "name": "gmlxo76",
+    "url": "https://github.com/gmlxo76"
+  },
+  "homepage": "https://github.com/gmlxo76/aicowork-yue-in-cc",
+  "repository": "https://github.com/gmlxo76/aicowork-yue-in-cc",
+  "license": "Apache-2.0",
+  "keywords": ["music", "music-generation", "yue", "abc-notation", "cover", "aicowork", "claude-code", "claude-code-plugin"]
+}

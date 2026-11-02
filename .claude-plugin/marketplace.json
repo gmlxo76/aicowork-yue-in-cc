@@ -1,0 +1,21 @@
+{
+  "name": "aicowork-yue-in-cc",
+  "owner": {
+    "name": "gmlxo76",
+    "url": "https://github.com/gmlxo76"
+  },
+  "metadata": {
+    "description": "Claude Code plugin that wraps the AICowork YuE Studio API (YuE2-3B + YuE2-Vae, /api/v1/jobs) — songs with lyrics, instrumental-LoRA pieces with structure tags, ABC score planning/editing, cover transcription from recordings, exact plan re-rendering, and FLAC/WAV/MP3 output, with agent-decided caption / cot / preset / token-cap / seed.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "aicowork-yue",
+      "source": "./",
+      "description": "/aicowork-yue:status, :config, :create, :cover, :score, :jobs — text → music via AICowork YuE Studio. The create skill picks vocal vs instrumental LoRA, writes the caption and tagged lyrics or structure plan, chooses cot/preset/token cap/seed, feeds ABC scores or re-renders saved plans, submits with an Idempotency-Key, polls and saves audio + score.",
+      "version": "0.1.0",
+      "tags": ["music", "music-generation", "yue", "abc-notation", "cover", "aicowork", "claude-code", "audio-generation"],
+      "category": "productivity"
+    }
+  ]
+}
